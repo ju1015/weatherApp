@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baler Weather</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="border-[1px] h-[100vh]  mx-auto flex justify-center items-center box-border bg-[#f5f998]">
+        <div class="mb-[50px] h-[80vh] sm:w-[40%] w-[100%] mx-auto border-[1px] border-[black] overflow-scroll sm:overflow-hidden
+        bg-[#0093E9]
+        bg-gradient-to-r from-cyan-500 to-blue-500 rounded
+        ">
+           <div class="pt-[5px] px-[2px] grid sm:grid-cols-10 sm:gap-4 grid-cols-2 gap-2">
+                <input type="text" placeholder="Enter city name" class="rounded sm:col-span-6" id="input">
+                <button class="bg-[white] rounded-full w-[100px] text-center sm:col-span-4" id="btn">Search</button>
+           </div>
+           <div class="mx-auto flex justify-center sm:scale-125 sm:mt-10">
+            <img src="clear.png" alt="img" id="image">
+           </div>
+           <div>
+            <p id="temp" class="text-4xl text-[white] font-bold text-center">22°C</p>
+            <p id="place" class="text-center text-[white] font-bold text-2xl sm:mt-3">New York</p>
+           </div>
+           <div class="flex justify-around mt-[5px] sm:mt-[10px]">
+            <div class="mt-3">
+                <img src="humidity.png" alt="img1" class="scale-75">
+                <p class="text-[white]" >Wind Speed </p>
+                <p class="text-[white]" id="Wind_Speed">20 kmph</p>
+            </div>
+            <div class="">
+                <img src="wind.png" alt="img2" class="scale-75">
+                <p class="text-[white]">Humidity </p>
+                <p class="text-[white]" id="Humidity">50%</p>
+            </div>
+           </div>
+        </div>
+    <script>
+        const input=document.getElementById('input')
+        const Icon=document.getElementById('image')
+        const URL='https://api.weatherapi.com/v1/current.json?key=7b9a33446d094ffe9d3161333242606&aqi=no&q='
+        async function weather(val){
+            const response=await fetch(URL+val)
+            obj=await response.json()
+            console.log(obj)
+            document.querySelector('#temp').innerHTML=Math.round(obj.current.temp_c)+' °C'
+            document.getElementById('place').innerText=obj.location.name
+            document.getElementById('Wind_Speed').innerText=obj.current.wind_kph+' kmph'
+            document.getElementById('Humidity').innerText=obj.current.humidity+' %'
+            if(obj.current.condition.text=='Mist'){
+                Icon.src='mist.png'
+            }
+            else if(obj.current.condition.text=='Clouds'){
+                Icon.src='clouds.png'
+            }
+            else if(obj.current.condition.text=='Clear'){
+                Icon.src='clear.png'
+            }
+            else if(obj.current.condition.text=='Rain'){
+                Icon.src='rain.png'
+            }
+            else if(obj.current.condition.text=='Drizzle'){
+                Icon.src='drizzle.png'
+            }
+        }
+        const btn=document.querySelector('#btn').addEventListener('click',()=>{
+            weather(input.value)
+            //console.log(input.value)
+        })
+    </script>
+</body>
+</html>
